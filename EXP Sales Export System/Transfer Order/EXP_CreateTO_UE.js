@@ -14,6 +14,7 @@ define(['N/config', 'N/currentRecord', 'N/file', 'N/log', 'N/record', 'N/redirec
      * @param{redirect} redirect
      * @param{render} render
      * @param{runtime} runtime
+     * @param{libCode} libCode
      */
     (_config, _currentRecord, _file, _log, _record, _redirect, _render, _runtime , _url , _query ,  _libCode) => {
         /**
@@ -48,15 +49,20 @@ define(['N/config', 'N/currentRecord', 'N/file', 'N/log', 'N/record', 'N/redirec
             //###################################### ปุ่มสร้าง Transfer Order #############################################
             try {
                 if (event == 'view') {
-                    var createpo_url = url.resolveScript({scriptId: "customscript_exp_createto_sl", deploymentId: 1, params: {rectype: newRecord.id, recid: newRecord.type}});
-                    var script = " a = ''; var url = '" + createpo_url + "'; window.open(url);";
-                    var print_button_pr = form.addButton({
-                        id: 'custpage_createpo_button',
-                        label: 'Create Transfer Order',
-                        functionName: script
-                    });
+                    var  check_loadingplan = libCode.loadSavedSearch(null , 'customsearch_exp_loadingplan' , [search.createFilter({ name : 'custrecord_lp_transaction' , join : null , operator : 'anyof' , values : recid})]);
+                    log.debug('check_loadingplan' , check_loadingplan);
+                    if(!!check_loadingplan && check_loadingplan.length > 0){
+                        var createpo_url = url.resolveScript({scriptId: "customscript_exp_createto_sl", deploymentId: 1, params: {rectype: rectype, recid: recid}});
+                        var scriptFunction = "function gotopage(){return '"+createpo_url+"';}";
+                        scriptFunction += "window.location.href = gotopage();";
+                        // var script = " a = ''; var url = '" + createpo_url + "'; document.location ='"  + createpo_url +"';";
+                        var print_button_pr = form.addButton({
+                            id: 'custpage_createpo_button',
+                            label: 'Create Transfer Order',
+                            functionName: scriptFunction
+                        });
+                    }
                 }
-
             } catch (e) {
 
                 log.error({
