@@ -49,7 +49,7 @@ define(['N/config', 'N/currentRecord', 'N/file', 'N/log', 'N/record', 'N/redirec
             //###################################### ปุ่มสร้าง Transfer Order #############################################
             try {
                 if (event == 'view') {
-                    var  check_loadingplan = libCode.loadSavedSearch(null , 'customsearch_exp_loadingplan' , [search.createFilter({ name : 'custrecord_lp_transaction' , join : null , operator : 'anyof' , values : recid})]);
+                    var  check_loadingplan = libCode.loadSavedSearch(null , 'customsearch_exp_loadingplan_to' , [search.createFilter({ name : 'custrecord_lp_transaction' , join : null , operator : 'anyof' , values : recid})]);
                     log.debug('check_loadingplan' , check_loadingplan);
                     if(!!check_loadingplan && check_loadingplan.length > 0){
                         var createpo_url = url.resolveScript({scriptId: "customscript_exp_createto_sl", deploymentId: 1, params: {rectype: rectype, recid: recid}});
